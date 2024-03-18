@@ -1,0 +1,57 @@
+html {
+    --accent: #DB2B39;
+    --dark: #67697C;
+    --light: #F8FFE5;
+    --light-accent: #F3A712;
+    --dim-light: #F0CEA0;
+}
+p {
+    margin: 0px;
+}
+a {
+    text-decoration: none;
+}
+body {
+    margin: 0px;
+}
+.padded-light {
+    padding: 8px;
+}
+.block-text-container {
+    background-color: var(--dark);
+    margin: 8px;
+    padding: 8px
+}
+.bar-item {
+    color: var(--light);
+    width: 1px;
+    height: 1px;
+    vertical-align: middle;
+    padding: 16px;
+}
+.top img {
+    height: 100%;
+    vertical-align: middle;
+}
+.center {
+    margin: 25%;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+.game-body {
+    margin: 0; 
+    padding: 0; 
+    overflow: hidden;
+    background-color: black;
+}
+.background {
+    background-color: var(--dim-light);
+}
+.light-text {
+    color: var(--light);
+}
+.top {
+    background-color: var(--accent);
+    height: 100px;
+    width: 100%;
+}

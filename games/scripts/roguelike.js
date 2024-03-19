@@ -31,8 +31,12 @@ let enemyHue = 0;
 let enemyMinValue = 0.3;
 
 //* text varaibles
-let textSize = 100;
-let verticalOffset = 10;
+let scoreTextSize = 100;
+let scoreVerticalOffset = 10;
+let versionTextSize = 20;
+let versionPadding = 10;
+const version = "0.1.3";
+
 
 //* input variables
 let keysHeld = [];
@@ -55,9 +59,11 @@ function update() {
     ctx.fill();
     ctx.closePath();
 
-    ctx.font = textSize + "px monospace"
-    ctx.fillStyle = "#FF0000"
-    ctx.fillText(kills, width/2, verticalOffset + textSize);
+    ctx.font = scoreTextSize + "px monospace";
+    ctx.fillStyle = "#FF0000";
+    ctx.fillText(kills, width/2, scoreVerticalOffset + scoreTextSize);
+    ctx.font = versionTextSize + "px monospace";
+    ctx.fillText(version, versionPadding, height - versionPadding);
 
     let moveVector = { x: keysHeld[65] ? -1 : 0 + keysHeld[68] ? 1 : 0, y: keysHeld[87] ? -1 : 0 + keysHeld[83] ? 1 : 0};
 

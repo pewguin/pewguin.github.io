@@ -37,7 +37,7 @@ const versionTextSize = 20;
 const versionPadding = 10;
 const endTextSize = 50;
 const endText = "skill issue";
-const version = "0.1.3.wt";
+const version = "0.1.4";
 const restartButtonHeight = 50;
 let restartButtonRect;
 const restartButtonPadding = 10;

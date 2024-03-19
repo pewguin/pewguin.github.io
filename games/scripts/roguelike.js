@@ -18,24 +18,31 @@ let bulletSpeed = 40;
 let bulletSize = 4;
 let bulletTimeoutMs = 40;
 let bulletColor = "#2020FF";
-let spread = 45 * Math.PI/180;
+let spread = 30 * Math.PI/180;
 let bulletPierce = 0;
 let canFire = true;
 
 //* enemy variables
 let enemies = [];
 let enemySpeed = 2;
-let enemySize = 100;
+let enemySize = 30;
 let enemyMaxHp = 2;
 let enemyHue = 0;
 let enemyMinValue = 0.3;
 
-//* text varaibles
-let scoreTextSize = 100;
-let scoreVerticalOffset = 10;
-let versionTextSize = 20;
-let versionPadding = 10;
-const version = "0.1.3";
+//* text variables
+const scoreTextSize = 100;
+const scoreVerticalOffset = 10;
+const versionTextSize = 20;
+const versionPadding = 10;
+const endTextSize = 50;
+const endText = "skill issue";
+const version = "0.1.3.wt";
+const restartButtonHeight = 50;
+let restartButtonRect;
+const restartButtonPadding = 10;
+const restartButtonText = "RESTART";
+
 
 
 //* input variables
@@ -45,14 +52,13 @@ let keysPressed =[];
 //* debug
 let debugPoints = [];
 
-function update() {
-    enemies.forEach(enemy => {
+function gameUpdate() {
+    for (const enemy of enemies) {
         if (circleRectCollision({ x: player.x, y: player.y, r: playerSize }, { x: enemy.x -(enemySize/2), y: enemy.y -(enemySize/2), w: enemySize, h: enemySize })) {
-            alert("skill issue");
             end();
-            location.reload();
+            return;
         }
-    });
+    }
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
     ctx.fillStyle = "#333333";
@@ -161,6 +167,13 @@ function update() {
     ctx.fill();
     ctx.closePath();
 
+    drawDebugPoints();
+
+    keysPressed = [];
+    debugPoints = [];
+}
+
+function drawDebugPoints() {
     debugPoints.forEach(point => {
         ctx.beginPath();
         ctx.ellipse(point.x, point.y, 2, 2, 0, 0, 2*Math.PI);
@@ -168,9 +181,6 @@ function update() {
         ctx.fill();
         ctx.closePath();
     });
-
-    keysPressed = [];
-    debugPoints = [];
 }
 
 function vectorToAngle(vector) {
@@ -233,6 +243,11 @@ function rectRayCollision(rect, p1, p2) {
     return linesIntersect(tl, tr, p1, p2) || linesIntersect(tr, br, p1, p2) || linesIntersect(br, bl, p1, p2) ||  linesIntersect(bl, tl, p1, p2);
 }
 
+function pointRectCollision(p, rect) {
+    return p.x >= rect.x && p.x <= rect.x + rect.w &&
+        p.y >= rect.y && p.y <= rect.y + rect.h;
+}
+
 function hsvToRgb(h, s, v) {
     var r, g, b, i, f, p, q, t;
     i = Math.floor(h * 6);
@@ -264,23 +279,41 @@ function hsvToRgb(h, s, v) {
     return "rgb("+Math.round(r * n) + ", " + Math.round(g * n) + ", " + Math.round(b * n) + ")";
 }
 
-function resize(event) {
-    width = window.innerWidth;
-    canvas.width = width;
-    height = window.innerHeight-document.getElementById("header").clientHeight;
-    canvas.height = height;
-}
+function drawEndScreen() {
+    ctx.beginPath();
+    ctx.rect(0, 0, width, height);
+    ctx.fillStyle = "#333333";
+    ctx.fill();
+    ctx.closePath();
 
-function load() {
-    resize();
-    player.x = width/2;
-    player.y = height/2;
-    gameLoop = setInterval(update, 17);
+    ctx.fillStyle = "#FF0000";
+    ctx.font = endTextSize + "px monospace";
+    ctx.fillText(endText, width/2 - ctx.measureText(endText).width/2, height/2);
+
+    ctx.font = restartButtonHeight - restartButtonPadding + "px monospace";
+    let restartButtonWidth = ctx.measureText(restartButtonText).width + 2*restartButtonPadding;
+    restartButtonRect = { x: width/2 - restartButtonWidth/2, y: height/2 + endTextSize, w: restartButtonWidth, h: restartButtonHeight };
+    ctx.beginPath();
+    ctx.rect(restartButtonRect.x, restartButtonRect.y, restartButtonRect.w, restartButtonRect.h);
+    ctx.fillStyle = "#E00000";
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.fillStyle = "#404040";
+    ctx.fillText(restartButtonText, width/2 - restartButtonWidth/2 + restartButtonPadding, height/2 + endTextSize + restartButtonHeight - restartButtonPadding);
 }
 
 function end() {
     clearInterval(gameLoop);
     alive = false;
+    drawEndScreen();
+}
+
+function restart() {
+    enemies = [];
+    projectiles = [];
+    alive = true;
+    load();
 }
 
 function mousemove(event) {
@@ -297,11 +330,35 @@ function keyup(event) {
     keysHeld[event.keyCode] = false;
 }
 
+function resize(event) {
+    width = window.innerWidth;
+    canvas.width = width;
+    height = window.innerHeight-document.getElementById("header").clientHeight;
+    canvas.height = height;
+    if (!alive) {
+        drawEndScreen();
+    }
+}
+
+function mousedown(event) {
+    if (event.button == 0 && !alive && pointRectCollision({ x: event.clientX, y: event.clientY - 100 }, restartButtonRect)) {
+        restart();
+    }
+}
+
+function load() {
+    resize();
+    player.x = width/2;
+    player.y = height/2;
+    gameLoop = window.setInterval(gameUpdate, 17);
+    startEnemyLoop();
+}
+
 function spawnEnemy() {
     if (Math.random() > 0.5) {
-        enemies.push({x: Math.random() * (width + enemySize) - enemySize / 2, y: Math.random() > 0.5 ? 0 - enemySize / 2 : height + enemySize / 2, size: 100, hp: enemyMaxHp});
+        enemies.push({x: Math.random() * (width + enemySize) - enemySize / 2, y: Math.random() > 0.5 ? 0 - enemySize / 2 : height + enemySize / 2, size: enemySize, hp: enemyMaxHp});
     } else {
-        enemies.push({x: Math.random() > 0.5 ? 0 - enemySize / 2 : width + enemySize / 2, y: Math.random() * (height + enemySize) - enemySize / 2, size: 100, hp: enemyMaxHp});
+        enemies.push({x: Math.random() > 0.5 ? 0 - enemySize / 2 : width + enemySize / 2, y: Math.random() * (height + enemySize) - enemySize / 2, size: enemySize, hp: enemyMaxHp});
     }
 }
 
@@ -314,7 +371,7 @@ function startEnemyLoop() {
 
 window.addEventListener("resize", resize);
 canvas.addEventListener("mousemove", mousemove);
+canvas.addEventListener("mousedown", mousedown);
 window.addEventListener("keydown", keydown);
 window.addEventListener("keyup", keyup);
 window.setTimeout(load, 500);
-startEnemyLoop();

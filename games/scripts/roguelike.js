@@ -9,15 +9,15 @@ let gameLoop;
 let player = { x: 0, y: 0 }
 let playerColor = "#FF128F";
 let speed = 7;
-const size = 20;
+const playerSize = 20;
 let kills = 0;
 
 let projectiles = [];
-let bulletSpeed = 1000;
+let bulletSpeed = 40;
 let bulletSize = 4;
 let bulletTimeoutMs = 40;
 let bulletColor = "#2020FF";
-let spread = 1.2;
+let spread = 45 * Math.PI/180;
 let bulletPierce = 0;
 let canFire = true;
 
@@ -29,6 +29,10 @@ let enemyMaxHp = 2;
 let enemyHue = 0;
 let enemyMinValue = 0.3;
 
+//* text varaibles
+let textSize = 100;
+let verticalOffset = 10;
+
 //* input variables
 let keysHeld = [];
 let keysPressed =[];
@@ -38,7 +42,7 @@ let debugPoints = [];
 
 function update() {
     enemies.forEach(enemy => {
-        if (circleRectCollision({ x: player.x, y: player.y, r: size }, { x: enemy.x -(enemySize/2), y: enemy.y -(enemySize/2), w: enemySize, h: enemySize })) {
+        if (circleRectCollision({ x: player.x, y: player.y, r: playerSize }, { x: enemy.x -(enemySize/2), y: enemy.y -(enemySize/2), w: enemySize, h: enemySize })) {
             alert("skill issue");
             end();
             location.reload();
@@ -46,9 +50,13 @@ function update() {
     });
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
-    ctx.fillStyle = "#000000";
+    ctx.fillStyle = "#333333";
     ctx.fill();
     ctx.closePath();
+
+    ctx.font = textSize + "px monospace"
+    ctx.fillStyle = "#FF0000"
+    ctx.fillText(kills, width/2, verticalOffset + textSize);
 
     let moveVector = { x: keysHeld[65] ? -1 : 0 + keysHeld[68] ? 1 : 0, y: keysHeld[87] ? -1 : 0 + keysHeld[83] ? 1 : 0};
 
@@ -60,23 +68,28 @@ function update() {
     player.x += moveVector.x;
     player.y += moveVector.y;
 
-    if (player.x - size < 0) {
-        player.x = size;
-    } else if (player.x + size > width) {
-        player.x = width -size;
+    if (player.x - playerSize < 0) {
+        player.x = playerSize;
+    } else if (player.x + playerSize > width) {
+        player.x = width -playerSize;
     }
-    if (player.y - size < 0) {
-        player.y = size;
-    } else if (player.y + size > height) {
-        player.y = height -size;
+    if (player.y - playerSize < 0) {
+        player.y = playerSize;
+    } else if (player.y + playerSize > height) {
+        player.y = height -playerSize;
     }
 
     let shootVector = { x: keysHeld[37] ? -1 : 0 + keysHeld[39] ? 1 : 0, y: keysHeld[38] ? -1 : 0 + keysHeld[40] ? 1 : 0};
     shootVector = normalize(shootVector);
     if (magnitude(shootVector) > 0 && canFire) {
+        let dir = vectorToAngle(shootVector);
+        dir += Math.random() * spread - spread / 2;
+        shootVector = angleToVector(dir);
+        shootVector.y *= -1;
         shootVector.x = shootVector.x * bulletSpeed + moveVector.x;
         shootVector.y = shootVector.y * bulletSpeed + moveVector.y;
         projectiles.push({ x: player.x, y: player.y, vel: shootVector, pierce: bulletPierce, hitEnemies: []});
+        
         canFire = false;
         setTimeout(() => { canFire = true }, bulletTimeoutMs);
     }
@@ -99,7 +112,6 @@ function update() {
                 } else {
                     enemies.splice(enemies.indexOf(enemy), 1);
                     kills++;
-                    console.log(kills);
                 }
                 return;
             }
@@ -137,7 +149,7 @@ function update() {
     });
 
     ctx.beginPath();
-    ctx.ellipse(player.x, player.y, size, size, 0, 0, Math.PI*2);
+    ctx.ellipse(player.x, player.y, playerSize, playerSize, 0, 0, Math.PI*2);
     ctx.fillStyle = playerColor;
     ctx.fill();
     ctx.closePath();
@@ -152,6 +164,18 @@ function update() {
 
     keysPressed = [];
     debugPoints = [];
+}
+
+function vectorToAngle(vector) {
+    if (vector.y < 0) {
+        return Math.acos(vector.x);
+    } else {
+        return (2*Math.PI) - Math.acos(vector.x);
+    }
+}
+
+function angleToVector(angle) {
+    return { x: Math.cos(angle), y: Math.sin(angle) }
 }
 
 function normalize(vector) {
@@ -260,7 +284,6 @@ function mousemove(event) {
 function keydown(event) {
     keysHeld[event.keyCode] = true;
     keysPressed.push(event.key);
-    // console.log(event.key, event.keyCode);
 }
 
 function keyup(event) {
@@ -273,5 +296,9 @@ window.addEventListener("keydown", keydown);
 window.addEventListener("keyup", keyup);
 window.setTimeout(load, 500);
 const enemySpawner = window.setInterval(() => {
-    enemies.push({x: 0, y: 0, size: 100, hp: enemyMaxHp});
-}, 1000);
+    if (Math.random() > 0.5) {
+        enemies.push({x: Math.random() * (width + enemySize) - enemySize / 2, y: Math.random() > 0.5 ? 0 - enemySize / 2 : height + enemySize / 2, size: 100, hp: enemyMaxHp});
+    } else {
+        enemies.push({x: Math.random() > 0.5 ? 0 - enemySize / 2 : width + enemySize / 2, y: Math.random() * (height + enemySize) - enemySize / 2, size: 100, hp: enemyMaxHp});
+    }
+}, Math.random() * 1000);

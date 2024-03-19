@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 let width;
 let height;
 let gameLoop;
+let alive = true;
 
 //* player variables
 let player = { x: 0, y: 0 }
@@ -273,7 +274,7 @@ function load() {
 
 function end() {
     clearInterval(gameLoop);
-    clearInterval(enemySpawner);
+    alive = false;
 }
 
 function mousemove(event) {
@@ -290,15 +291,24 @@ function keyup(event) {
     keysHeld[event.keyCode] = false;
 }
 
-window.addEventListener("resize", resize);
-canvas.addEventListener("mousemove", mousemove);
-window.addEventListener("keydown", keydown);
-window.addEventListener("keyup", keyup);
-window.setTimeout(load, 500);
-const enemySpawner = window.setInterval(() => {
+function spawnEnemy() {
     if (Math.random() > 0.5) {
         enemies.push({x: Math.random() * (width + enemySize) - enemySize / 2, y: Math.random() > 0.5 ? 0 - enemySize / 2 : height + enemySize / 2, size: 100, hp: enemyMaxHp});
     } else {
         enemies.push({x: Math.random() > 0.5 ? 0 - enemySize / 2 : width + enemySize / 2, y: Math.random() * (height + enemySize) - enemySize / 2, size: 100, hp: enemyMaxHp});
     }
-}, Math.random() * 1000);
+}
+
+function startEnemyLoop() {
+    spawnEnemy();
+    if (alive) {
+        window.setTimeout(startEnemyLoop, Math.random() * 1000);
+    }
+}
+
+window.addEventListener("resize", resize);
+canvas.addEventListener("mousemove", mousemove);
+window.addEventListener("keydown", keydown);
+window.addEventListener("keyup", keyup);
+window.setTimeout(load, 500);
+startEnemyLoop();

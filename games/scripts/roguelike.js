@@ -5,30 +5,65 @@ let width;
 let height;
 let gameLoop;
 let alive = true;
+let levelling = false;
+let backgroundColor = { r: 51, g: 51, b: 51 };
+let secondsAlive = 0;
+let startTime = Date.now();
+let addendTime = 0;
 
 //* player variables
 let player = { x: 0, y: 0 }
 let playerColor = "#FF128F";
-let speed = 7;
+const speedStart = 7;
+let speed = speedStart;
 const playerSize = 20;
 let kills = 0;
+let level = 1;
+let killsPerLevel = 20;
+let upgradesToChoose = [];
+const livesStart = 1;
+let lives = livesStart;
+const upgrades = [{ name: "Faster firing", effect: () => { bulletTimeoutMs *= 0.9 }}, 
+                  { name: "Faster movement", effect: () => { speed *= 1.1 }},
+                  { name: "More Pierce", effect: () => { bulletPierce++ }},
+                  { name: "Reduced spread", effect: () => { spread *= 0.8 }},
+                  { name: "Faster bullets", effect: () => { bulletSpeed *= 1.2 }},
+                  { name: "Slower enemies", effect: () => { enemySpeed *= 0.9 }},
+                  { name: "Extra life", effect: () => { lives++; }}];
 
 let projectiles = [];
-let bulletSpeed = 40;
-let bulletSize = 4;
-let bulletTimeoutMs = 40;
+const bulletSpeedStart = 40;
+let bulletSpeed = bulletSpeedStart;
+const bulletSizeStart = 4;
+let bulletSize = bulletSizeStart;
+const bulletTimeoutMsStart = 400;
+let bulletTimeoutMs = bulletTimeoutMsStart;
 let bulletColor = "#2020FF";
-let spread = 30 * Math.PI/180;
-let bulletPierce = 0;
+const spreadStart = 30 * Math.PI/180;
+let spread = spreadStart;
+const bulletPierceStart = 0;
+let bulletPierce = bulletPierceStart;
 let canFire = true;
+let bulletParticleVelocityMin = 1;
+let bulletParticleVelocityMax = 1;
+let bulletParticleVelocityDecay = 0.9;
+let bulletParticleColor = { r: 255, g: 0, b: 0};
+let bulletParticleSize = 2;
 
 //* enemy variables
 let enemies = [];
-let enemySpeed = 2;
+const enemySpeedStart = 2;
+let enemySpeed = enemySpeedStart;
+let minEnemySpeed = 0.5;
 let enemySize = 30;
 let enemyMaxHp = 2;
 let enemyHue = 0;
 let enemyMinValue = 0.3;
+let enemyParticleVelocityMin = 0.2;
+let enemyParticleVelocityMax = 5;
+let enemyParticleVelocityDecay = 0.9;
+let enemyParticleColor = { r: 255, g: 0, b: 0};
+let enemyParticleSize = 2;
 
 //* text variables
 const scoreTextSize = 100;
@@ -37,13 +72,21 @@ const versionTextSize = 20;
 const versionPadding = 10;
 const endTextSize = 50;
 const endText = "skill issue";
-const version = "0.1.4";
+const version = "0.1.4.w";
 const restartButtonHeight = 50;
 let restartButtonRect;
+let upgradeButtonsRects = [];
 const restartButtonPadding = 10;
 const restartButtonText = "RESTART";
+const timerSize = 30;
+const timerPadding = 10;
+const levelUpSize = 40;
+const levelUpPadding = 10;
+const upgradePadding = 20;
+const upgradeSize = 40;
 
-
+//* particle constants
+let particles = [];
 
 //* input variables
 let keysHeld = [];
@@ -53,23 +96,40 @@ let keysPressed =[];
 let debugPoints = [];
 
 function gameUpdate() {
+    if (!document.hidden && alive) {
+        updateTimer();
+    }
     for (const enemy of enemies) {
         if (circleRectCollision({ x: player.x, y: player.y, r: playerSize }, { x: enemy.x -(enemySize/2), y: enemy.y -(enemySize/2), w: enemySize, h: enemySize })) {
-            end();
-            return;
+            if (lives <= 0) {
+                end();
+                return;
+            } else {
+                lives--;
+                enemies.splice(enemies.indexOf(enemy), 1);
+            }
         }
     }
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
-    ctx.fillStyle = "#333333";
+    ctx.fillStyle = "rgb("+backgroundColor.r+","+backgroundColor.g+","+backgroundColor.b+")";
     ctx.fill();
     ctx.closePath();
 
     ctx.font = scoreTextSize + "px monospace";
     ctx.fillStyle = "#FF0000";
-    ctx.fillText(kills, width/2, scoreVerticalOffset + scoreTextSize);
+    ctx.fillText(kills, width/2 - ctx.measureText(kills).width/2, scoreVerticalOffset + scoreTextSize);
     ctx.font = versionTextSize + "px monospace";
     ctx.fillText(version, versionPadding, height - versionPadding);
+
+    ctx.font = timerSize + "px monospace";
+    ctx.fillStyle = "#FF0000";
+    let minutes = Math.round(secondsAlive%60);
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    let timeFormatted = Math.floor(secondsAlive/60) + ":" + minutes;
+    ctx.fillText(timeFormatted, width-ctx.measureText(timeFormatted).width - timerPadding, height - timerPadding);
 
     let moveVector = { x: keysHeld[65] ? -1 : 0 + keysHeld[68] ? 1 : 0, y: keysHeld[87] ? -1 : 0 + keysHeld[83] ? 1 : 0};
 
@@ -123,6 +183,9 @@ function gameUpdate() {
                 if (enemy.hp > 0) {
                     enemy.hp--;
                 } else {
+                    for (let i = 0; i < 10; i++) {
+                        particles.push({ x: enemy.x, y: enemy.y, vel: { x: Math.random()*6 - 3, y: Math.random()*6 - 3 }, velDecay: 0.9, color: { r: 255, g: 0, b: 0 }, size: 2 });
+                    }
                     enemies.splice(enemies.indexOf(enemy), 1);
                     kills++;
                 }
@@ -145,11 +208,13 @@ function gameUpdate() {
         ctx.closePath();
     });
 
+    drawParticles();
+
     enemies.forEach(enemy => {
         let moveVector = normalize({ x: player.x - enemy.x, y: player.y - enemy.y });
 
-        moveVector.x *= enemySpeed;
-        moveVector.y *= enemySpeed;
+        moveVector.x *= enemySpeed * Math.max(minEnemySpeed, enemy.hp/enemyMaxHp);
+        moveVector.y *= enemySpeed * Math.max(minEnemySpeed, enemy.hp/enemyMaxHp);
 
         enemy.x += moveVector.x;
         enemy.y += moveVector.y;
@@ -171,6 +236,44 @@ function gameUpdate() {
 
     keysPressed = [];
     debugPoints = [];
+
+    if (kills >= killsPerLevel * level) {
+        level++;
+        pause();
+        levelUp();
+    }
+}
+
+function newParticle(pos, velMin, velMax, velDecay, color, size) {
+    let velVector = angleToVector(Math.random() * Math.PI * 2);
+    let speed = lerp(velMin, velMax, Math.random());
+    velVector.x *= speed;
+    velVector.y *= speed;
+    particles.push({ x: pos.x, y: pos.y, vel: velVector, velDecay: velDecay, color: color, size: size });
+}
+
+function drawParticles() {
+    particles.forEach(particle => {
+        particle.x += particle.vel.x;
+        particle.y += particle.vel.y;
+
+        particle.vel.x *= particle.velDecay;
+        particle.vel.y *= particle.velDecay;
+
+        if (magnitude(particle.vel) < 0.01) {
+            particles.splice(particles.indexOf(particle), 1);
+        }
+
+        let color = { r: lerp(particle.color.r, backgroundColor.r, 1 - (Math.min(magnitude(particle.vel), 1)**2)), 
+                      g: lerp(particle.color.g, backgroundColor.g, 1 - (Math.min(magnitude(particle.vel), 1)**2)),
+                      b: lerp(particle.color.b, backgroundColor.b, 1 - (Math.min(magnitude(particle.vel), 1)**2))};
+
+        ctx.beginPath();
+        ctx.ellipse(particle.x, particle.y, particle.size, particle.size, 0, 0, Math.PI*2);
+        ctx.fillStyle = "rgb("+color.r+","+color.g+","+color.b+")";
+        ctx.fill();
+        ctx.closePath();
+    });
 }
 
 function drawDebugPoints() {
@@ -181,6 +284,10 @@ function drawDebugPoints() {
         ctx.fill();
         ctx.closePath();
     });
+}
+
+function lerp(a, b, t) {
+    return a + (b - a) * t;
 }
 
 function vectorToAngle(vector) {
@@ -305,15 +412,115 @@ function drawEndScreen() {
 
 function end() {
     clearInterval(gameLoop);
+    console.log("cleared");
     alive = false;
     drawEndScreen();
+}
+
+function drawLevelUp(upgradeChoices) {
+    upgradeButtons = [];
+    upgradesToChoose = upgradeChoices;
+    ctx.beginPath();
+    ctx.rect(0, 0, width, height);
+    ctx.fillStyle = "rgb("+backgroundColor.r+","+backgroundColor.g+","+backgroundColor.b+")";
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.font = levelUpSize + "px monospace";
+    ctx.fillStyle = "#FF0000";
+    let levelUpLineSize = ctx.measureText("LEVEL UP");
+    ctx.fillText("LEVEL UP", width/2-levelUpLineSize.width/2, levelUpSize + levelUpPadding);
+    ctx.font = levelUpSize/1.3 + "px monospace";
+    ctx.fillText("You are level " + level, width/2-ctx.measureText("You are level " + level).width/2, levelUpSize*2 + levelUpPadding);
+    ctx.font = versionTextSize + "px monospace";
+    ctx.fillText(version, versionPadding, height - versionPadding);
+
+    upgradeButtonsRects = [];
+    let totalUpgradeButtonWidth = 0;
+    for (let i = 0; i < upgradeChoices.length; i++) {
+        ctx.font = upgradeSize - upgradePadding + "px monospace";
+        let upgradeButtonWidth = ctx.measureText(upgradeChoices[i].name).width + 2*upgradePadding;
+        upgradeButtonsRects[i] = { x: totalUpgradeButtonWidth, y: height/2 + endTextSize, w: upgradeButtonWidth, h: restartButtonHeight };
+        totalUpgradeButtonWidth += upgradeButtonWidth;
+    }
+
+    for (let i = 0; i < upgradeChoices.length; i++) {
+        upgradeButtonsRects[i].x += width/2 - totalUpgradeButtonWidth/2 + upgradePadding * (i - Math.floor(upgradeChoices.length/2));
+        ctx.beginPath();
+        ctx.rect(upgradeButtonsRects[i].x, upgradeButtonsRects[i].y, upgradeButtonsRects[i].w, upgradeButtonsRects[i].h);
+        ctx.fillStyle = "#E00000";
+        ctx.fill();
+        ctx.closePath();
+        ctx.fillStyle = getRGBAsString(backgroundColor);
+        ctx.fillText(upgradeChoices[i].name, upgradeButtonsRects[i].x + upgradePadding, upgradeButtonsRects[i].y + upgradeSize/2 + upgradePadding);
+        upgradeButtons.push({ btn: upgradeChoices[i], rect: upgradeButtonsRects[i]});
+    }
+}
+
+function levelUp() {
+    levelling = true;
+    drawLevelUp(randomUpgrades());
+}
+
+function getRGBAsString(rgb) {
+    return "rgb("+rgb.r+","+rgb.g+","+rgb.b+")";
+}
+
+function randomUpgrades() {
+    let upgradesCopy = []; 
+    upgrades.forEach(upgrade => { 
+        upgradesCopy.push($.extend(true, {}, upgrade));
+    });
+    let chosenUpgrades = [];
+    for (let i = 0; i < 3; i++) {
+        let index = Math.round(Math.random() * (upgradesCopy.length-1));
+        chosenUpgrades.push(upgradesCopy[index]);
+        upgradesCopy.splice(index, 1);
+    }
+    return chosenUpgrades;
 }
 
 function restart() {
     enemies = [];
     projectiles = [];
+    particles = [];
     alive = true;
-    load();
+    kills = 0;
+    addendTime = 0;
+    secondsAlive = 0;
+    level = 0;
+    startTime = Date.now();
+    lives = livesStart;
+    speed = speedStart;
+    spread = spreadStart;
+    enemySpeed = enemySpeedStart;
+    bulletSize = bulletSizeStart;
+    bulletSpeed = bulletSpeedStart;
+    bulletPierce = bulletPierceStart;
+    bulletTimeoutMs = bulletTimeoutMsStart;
+    resize();
+    player.x = width/2;
+    player.y = height/2;
+    gameLoop = window.setInterval(gameUpdate, 17);
+    console.log("restart set");
+    startEnemyLoop();
+}
+
+function pause() {
+    clearInterval(gameLoop);
+    console.log("cleared");
+    alive = false;
+    paused = !paused;
+}
+
+function unpause() {
+    alive = true;
+    gameLoop = window.setInterval(gameUpdate, 17);
+    console.log("unpause set");
+    addendTime += secondsAlive * 1000 - addendTime;
+    startTime = Date.now();
+    startEnemyLoop();
+    paused = !paused;
 }
 
 function mousemove(event) {
@@ -321,9 +528,17 @@ function mousemove(event) {
     mouseY = event.pageY-100;
 }
 
+let paused = false;
 function keydown(event) {
     keysHeld[event.keyCode] = true;
     keysPressed.push(event.key);
+    if (event.key == ' ') {
+        if (!paused) {
+            pause(); 
+        } else if (paused) {
+            unpause();
+        }
+    }
 }
 
 function keyup(event) {
@@ -335,14 +550,28 @@ function resize(event) {
     canvas.width = width;
     height = window.innerHeight-document.getElementById("header").clientHeight;
     canvas.height = height;
-    if (!alive) {
+    if (levelling) {
+        drawLevelUp(upgradesToChoose);
+    } else if (!alive) {
         drawEndScreen();
     }
 }
 
+let upgradeButtons = [];
 function mousedown(event) {
-    if (event.button == 0 && !alive && pointRectCollision({ x: event.clientX, y: event.clientY - 100 }, restartButtonRect)) {
+    let mouse = { x: event.clientX, y: event.clientY - 100 };
+    if (restartButtonRect != null && event.button == 0 && !alive && pointRectCollision(mouse, restartButtonRect)) {
         restart();
+        restartButtonRect = null;
+    }
+    if (upgradeButtons != null && levelling) {
+        upgradeButtons.forEach(button => {
+            if (pointRectCollision(mouse, button.rect)) {
+                button.btn.effect();
+                levelling = false;
+                unpause();
+            }
+        });
     }
 }
 
@@ -362,10 +591,17 @@ function spawnEnemy() {
     }
 }
 
+function updateTimer() {
+    secondsAlive = (Date.now() - startTime + addendTime)/1000;
+}
+
 function startEnemyLoop() {
-    spawnEnemy();
+    if (!document.hidden && alive) {
+        spawnEnemy();
+    }
     if (alive) {
-        window.setTimeout(startEnemyLoop, Math.random() * 1000);
+        // https://www.desmos.com/calculator/6qg7kmk0ba
+        window.setTimeout(startEnemyLoop, Math.min(3000, 65000*(1/secondsAlive) + 10));
     }
 }
 

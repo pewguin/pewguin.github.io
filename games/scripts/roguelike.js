@@ -18,7 +18,7 @@ const speedStart = 7;
 let speed = speedStart;
 const playerSize = 20;
 let kills = 0;
-let level = 1;
+let level = 0;
 let killsPerLevel = 20;
 let upgradesToChoose = [];
 const livesStart = 1;
@@ -36,12 +36,12 @@ const bulletSpeedStart = 40;
 let bulletSpeed = bulletSpeedStart;
 const bulletSizeStart = 4;
 let bulletSize = bulletSizeStart;
-const bulletTimeoutMsStart = 300;
+const bulletTimeoutMsStart = 200;
 let bulletTimeoutMs = bulletTimeoutMsStart;
 let bulletColor = "#2020FF";
 const spreadStart = 25 * Math.PI/180;
 let spread = spreadStart;
-const bulletPierceStart = 0;
+const bulletPierceStart = 1;
 let bulletPierce = bulletPierceStart;
 let canFire = true;
 let bulletParticleVelocityMin = 1;
@@ -238,6 +238,8 @@ function gameUpdate() {
     debugPoints = [];
 
     if (kills >= killsPerLevel * level) {
+        console.log(kills, killsPerLevel, level);
+        console.log(killsPerLevel * level);
         level++;
         pause();
         levelUp();
@@ -412,7 +414,6 @@ function drawEndScreen() {
 
 function end() {
     clearInterval(gameLoop);
-    console.log("cleared");
     alive = false;
     drawEndScreen();
 }
@@ -502,13 +503,11 @@ function restart() {
     player.x = width/2;
     player.y = height/2;
     gameLoop = window.setInterval(gameUpdate, 17);
-    console.log("restart set");
     startEnemyLoop();
 }
 
 function pause() {
     clearInterval(gameLoop);
-    console.log("cleared");
     alive = false;
     paused = !paused;
 }
@@ -516,7 +515,6 @@ function pause() {
 function unpause() {
     alive = true;
     gameLoop = window.setInterval(gameUpdate, 17);
-    console.log("unpause set");
     addendTime += secondsAlive * 1000 - addendTime;
     startTime = Date.now();
     startEnemyLoop();

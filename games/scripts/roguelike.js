@@ -3,7 +3,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let width;
 let height;
-let gameLoop;
+let mainLoop;
 let alive = true;
 let levelling = false;
 let backgroundColor = { r: 51, g: 51, b: 51 };
@@ -95,7 +95,7 @@ let keysPressed =[];
 //* debug
 let debugPoints = [];
 
-function gameUpdate() {
+function update() {
     if (!document.hidden && alive) {
         updateTimer();
     }
@@ -413,7 +413,7 @@ function drawEndScreen() {
 }
 
 function end() {
-    clearInterval(gameLoop);
+    clearInterval(mainLoop);
     alive = false;
     drawEndScreen();
 }
@@ -502,19 +502,19 @@ function restart() {
     resize();
     player.x = width/2;
     player.y = height/2;
-    gameLoop = window.setInterval(gameUpdate, 17);
+    mainLoop = window.setInterval(update, 17);
     startEnemyLoop();
 }
 
 function pause() {
-    clearInterval(gameLoop);
+    clearInterval(mainLoop);
     alive = false;
     paused = !paused;
 }
 
 function unpause() {
     alive = true;
-    gameLoop = window.setInterval(gameUpdate, 17);
+    mainLoop = window.setInterval(update, 17);
     addendTime += secondsAlive * 1000 - addendTime;
     startTime = Date.now();
     startEnemyLoop();
@@ -577,7 +577,7 @@ function load() {
     resize();
     player.x = width/2;
     player.y = height/2;
-    gameLoop = window.setInterval(gameUpdate, 17);
+    mainLoop = window.setInterval(update, 17);
     startEnemyLoop();
 }
 

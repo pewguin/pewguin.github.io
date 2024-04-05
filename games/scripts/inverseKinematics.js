@@ -15,11 +15,13 @@ let mouse = { x: 0, y: 0};
 let debugPoints = [];
 
 //* inverse kinematics variables
-let joints = [{ x: 500, y: 300, l: 50 }];
-for (let i = 0; i < 10; i++) {
-    joints.push({ x: 0, y: 0, l: 50});
+let segmentSize = 50;
+let constraints = { max: Math.PI, min: 0};
+let joints = [{ x: 500, y: 300, l: segmentSize, c: { max: Math.PI, min: -Math.PI} }];
+let segmentAmount = 4;
+for (let i = 0; i < segmentAmount; i++) {
+    joints.push({ x: 0, y: 0, l: segmentSize, c: constraints });
 }
-console.log(joints);
 let target = mouse;
 let tolerance = 1;
 
@@ -31,13 +33,12 @@ function update() {
     ctx.fill();
     ctx.closePath();
     
-    drawSnake();
+    drawJoints();
 
     drawDebugPoints();
-    debugPoints = [];
 }
 
-function drawSnake() {
+function drawJoints() {
     ctx.lineWidth = 1;
     for (let i = 0; i < joints.length-1; i++) {
         ctx.beginPath();
@@ -49,33 +50,90 @@ function drawSnake() {
     ctx.lineWidth = 0;
 }
 
-function calculateSnake() {
+function calculateJoints() {
     let reach = 0;
     for (let i = 0; i < joints.length-1; i++) {
         reach += joints[i].l;
     }
     if (reach < distance(joints[0], target)) {
-        reach += 10;
         target = vectorBetweenPoints(joints[0], target);
         target = { x: target.x * reach + joints[0].x, y: target.y * reach + joints[0].y };
     }
     let startJoint = $.extend(true, {}, joints[0]);
     let endToTarget = distance(joints[joints.length-1], target);
+    let c = 0;
     while (endToTarget > tolerance) {
-        joints[joints.length-1] = { x: target.x, y: target.y, l: joints[joints.length-1].l };
+        joints[joints.length-1].x = target.x;
+        joints[joints.length-1].y = target.y;
         for (let i = joints.length-2; i >= 0; i--) {
             let newPosVec = vectorBetweenPoints(joints[i+1], joints[i]);
             let newPos = { x: newPosVec.x * joints[i].l + joints[i+1].x, y: newPosVec.y * joints[i].l + joints[i+1].y };
-            joints[i] = { x: newPos.x, y: newPos.y, l: joints[i].l };
+            
+            // if (i > 1) {
+            //     let thisSegmentAngle = vectorToAngle(vectorBetweenPoints(joints[i-1], newPos));
+            //     let prevSegmentAngle = Math.PI/2;
+            //     if (i > 0) {
+            //         prevSegmentAngle = vectorToAngle(vectorBetweenPoints(joints[i-2], joints[i-1]));
+            //     }
+            //     let relAngle = prevSegmentAngle - thisSegmentAngle;
+            //     relAngle = (relAngle + Math.PI)/2%Math.PI*2;
+            //     if (relAngle < 0) {
+            //         relAngle = Math.PI*2 + relAngle;
+            //     }
+
+            //     let constrainedPos = checkConstraints(joints[i-1].c, relAngle, prevSegmentAngle, joints[i-1]);
+                
+            //     if (constrainedPos) {
+            //         newPos = constrainedPos;
+            //     }
+            // }
+            
+            joints[i].x = newPos.x;
+            joints[i].y = newPos.y;
         }
         joints[0] = $.extend(true, {}, startJoint);
-        for (let i = 0; i < joints.length-2; i++) {
+        for (let i = 0; i <= joints.length-2; i++) {
             let newPosVec = vectorBetweenPoints(joints[i], joints[i+1]);
             let newPos = { x: newPosVec.x * joints[i].l + joints[i].x, y: newPosVec.y * joints[i].l + joints[i].y };
-            joints[i+1] = { x: newPos.x, y: newPos.y, l: joints[i+1].l };
+
+            let thisSegmentAngle = vectorToAngle(vectorBetweenPoints(joints[i], newPos));
+            let prevSegmentAngle = Math.PI/2;
+            if (i > 0) {
+                prevSegmentAngle = vectorToAngle(vectorBetweenPoints(joints[i-1], joints[i]));
+            }
+            let relAngle = prevSegmentAngle - thisSegmentAngle;
+            relAngle = (relAngle + Math.PI)/2%Math.PI*2;
+            if (relAngle < 0) {
+                relAngle = Math.PI*2 + relAngle;
+            }
+
+            let constrainedPos = checkConstraints(joints[i].c, relAngle, prevSegmentAngle, joints[i]);
+            
+            if (constrainedPos) {
+                newPos = constrainedPos;
+            }
+            
+            joints[i+1].x = newPos.x;
+            joints[i+1].y = newPos.y;
+        }
+        c++;
+        if (c >= 200) {
+            break;
         }
         endToTarget = distance(joints[joints.length-1], target);
     }
+}
+
+function checkConstraints(constraints, relativeAngle, prevAngle, prevJoint) {
+    relativeAngle = lerp(-Math.PI, Math.PI, relativeAngle/(Math.PI*2));
+    if (relativeAngle > constraints.max) {
+        let vec = angleToVector(constraints.max - prevAngle);
+        return { x: vec.x * prevJoint.l + prevJoint.x, y: vec.y * prevJoint.l + prevJoint.y };
+    } else if (relativeAngle < constraints.min) {
+        let vec = angleToVector(constraints.min - prevAngle);
+        return { x: vec.x * prevJoint.l + prevJoint.x, y: vec.y * prevJoint.l + prevJoint.y };
+    }
+    return null;
 }
 
 function drawDebugPoints() {
@@ -203,7 +261,7 @@ function getRGBAsString(rgb) {
 function mousemove(event) {
     mouse.x = event.pageX;
     mouse.y = event.pageY-100;
-    calculateSnake();
+    calculateJoints();
 }
 
 function keydown(event) {
@@ -223,9 +281,10 @@ function resize(event) {
     canvas.width = width;
     height = window.innerHeight-document.getElementById("header").clientHeight;
     canvas.height = height;
-    joints[0] = { x: width/2, y: height/2, l: joints[0].l };
-    calculateSnake();
-    drawSnake();
+    joints[0].x = width/2; 
+    joints[0].y = height/2;
+    calculateJoints();
+    drawJoints();
 }
 
 function mousedown(event) {

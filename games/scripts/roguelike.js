@@ -23,12 +23,14 @@ let killsPerLevel = 20;
 let upgradesToChoose = [];
 const livesStart = 1;
 let lives = livesStart;
+let livesDisplaySize = 25;
+let livesDisplayPadding = 10;
 const upgrades = [{ name: "Faster firing", effect: () => { bulletTimeoutMs *= 0.9 }}, 
                   { name: "Faster movement", effect: () => { speed *= 1.1 }},
                   { name: "More Pierce", effect: () => { bulletPierce++ }},
                   { name: "Reduced spread", effect: () => { spread *= 0.8 }},
                   { name: "Faster bullets", effect: () => { bulletSpeed *= 1.2 }},
-                  { name: "Slower enemies", effect: () => { enemySpeed *= 0.9 }},
+                  { name: "Slower enemies", effect: () => { squareEnemySpeed *= 0.9 }},
                   { name: "Extra life", effect: () => { lives++; }}];
 
 let projectiles = [];
@@ -52,18 +54,24 @@ let bulletParticleSize = 2;
 
 //* enemy variables
 let enemies = [];
-const enemySpeedStart = 2;
-let enemySpeed = enemySpeedStart;
-let minEnemySpeed = 0.5;
-let enemySize = 30;
-let enemyMaxHp = 2;
-let enemyHue = 0;
-let enemyMinValue = 0.3;
+const squareEnemySpeedStart = 2;
+let squareEnemySpeed = squareEnemySpeedStart;
+let minSquareEnemySpeed = 0.5;
+let squareEnemySize = 30;
+let squareEnemyMaxHp = 2;
+let squareEnemyHue = 0;
+let squareEnemyMinValue = 0.3;
 let enemyParticleVelocityMin = 0.2;
 let enemyParticleVelocityMax = 5;
 let enemyParticleVelocityDecay = 0.9;
-let enemyParticleColor = { r: 255, g: 0, b: 0};
+let squareEnemyParticleColor = { r: 255, g: 0, b: 0};
 let enemyParticleSize = 2;
+
+const triangleEnemySpeedStart = 0.5;
+let triangleEnemySpeed = triangleEnemySpeedStart;
+let triangleEnemySize = 25;
+let triangleEnemyChargeCooldownMs = 2000;
+let triangleEnemyColor = "#00FF00";
 
 //* text variables
 const scoreTextSize = 100;
@@ -100,12 +108,17 @@ function update() {
         updateTimer();
     }
     for (const enemy of enemies) {
-        if (circleRectCollision({ x: player.x, y: player.y, r: playerSize }, { x: enemy.x -(enemySize/2), y: enemy.y -(enemySize/2), w: enemySize, h: enemySize })) {
+        if (circleRectCollision({ x: player.x, y: player.y, r: playerSize }, { x: enemy.x -(squareEnemySize/2), y: enemy.y -(squareEnemySize/2), w: squareEnemySize, h: squareEnemySize })) {
             if (lives <= 0) {
                 end();
                 return;
             } else {
                 lives--;
+                for (let i = 0; i < 40; i++) {
+                    let partVec = angleToVector(Math.random()*Math.PI*2);
+                    let mag = Math.random()*10;
+                    particles.push({ x: player.x, y: player.y, vel: { x: partVec.x * mag, y: partVec.y * mag }, velDecay: 0.95, color: { r: 255, g: 255, b: 255 }, size: 5 });
+                }
                 enemies.splice(enemies.indexOf(enemy), 1);
             }
         }
@@ -131,6 +144,10 @@ function update() {
     let timeFormatted = Math.floor(secondsAlive/60) + ":" + minutes;
     ctx.fillText(timeFormatted, width-ctx.measureText(timeFormatted).width - timerPadding, height - timerPadding);
 
+    ctx.font = livesDisplaySize + "px monospace";
+    ctx.fillStyle = "#FF0000";
+    ctx.fillText("Lives: " + lives, 0 + livesDisplayPadding, livesDisplaySize + livesDisplayPadding);
+    
     let moveVector = { x: keysHeld[65] ? -1 : 0 + keysHeld[68] ? 1 : 0, y: keysHeld[87] ? -1 : 0 + keysHeld[83] ? 1 : 0};
 
     moveVector = normalize(moveVector);
@@ -172,7 +189,7 @@ function update() {
         proj.y += proj.vel.y;
 
         enemies.forEach(enemy => {
-            if (rectRayCollision({ x: enemy.x -(enemySize/2), y: enemy.y -(enemySize/2), w: enemySize, h: enemySize}, { x: proj.x, y: proj.y }, { x: proj.x-proj.vel.x, y: proj.y-proj.vel.y }) &&
+            if (rectRayCollision({ x: enemy.x -(enemy.size/2), y: enemy.y -(enemy.size/2), w: enemy.size, h: enemy.size}, { x: proj.x, y: proj.y }, { x: proj.x-proj.vel.x, y: proj.y-proj.vel.y }) &&
             !proj.hitEnemies.includes(enemy)) {
                 if (proj.pierce > 0) {
                     proj.pierce--;
@@ -212,16 +229,39 @@ function update() {
 
     enemies.forEach(enemy => {
         let moveVector = normalize({ x: player.x - enemy.x, y: player.y - enemy.y });
-
-        moveVector.x *= enemySpeed * Math.max(minEnemySpeed, enemy.hp/enemyMaxHp);
-        moveVector.y *= enemySpeed * Math.max(minEnemySpeed, enemy.hp/enemyMaxHp);
-
+        
+        if (enemy.triangle == null) {
+            moveVector.x *= squareEnemySpeed * Math.max(minSquareEnemySpeed, enemy.hp/squareEnemyMaxHp);
+            moveVector.y *= squareEnemySpeed * Math.max(minSquareEnemySpeed, enemy.hp/squareEnemyMaxHp);
+        } else {
+            moveVector.x *= triangleEnemySpeed;
+            moveVector.y *= triangleEnemySpeed;
+            if (!enemy.triangle.charging && enemy.triangle.canCharge) {
+                enemy.triangle.charging = true;
+                enemy.triangle.canCharge = false;
+                window.setTimeout(() => { enemy.triangle.canCharge = true; }, triangleEnemyChargeCooldownMs);
+                window.setTimeout(() => { enemy.triangle.charging = false; }, 400);
+            } else {
+                console.log(!enemy.triangle.charging && enemy.triangle.canCharge);
+            }
+            if (enemy.triangle.charging) {
+                moveVector.x *= 16;
+                moveVector.y *= 16;
+            }
+        }
         enemy.x += moveVector.x;
         enemy.y += moveVector.y;
 
         ctx.beginPath();
-        ctx.rect(enemy.x - (enemy.size/2), enemy.y - (enemy.size/2), enemySize, enemySize);
-        ctx.fillStyle = hsvToRgb(enemyHue, 1, (1-enemyMinValue)*(enemy.hp/enemyMaxHp) + enemyMinValue);
+        if (enemy.triangle == null) {
+            ctx.fillStyle = hsvToRgb(squareEnemyHue, 1, (1-squareEnemyMinValue)*(enemy.hp/squareEnemyMaxHp) + squareEnemyMinValue);
+            ctx.rect(enemy.x - (enemy.size/2), enemy.y - (enemy.size/2), enemy.size, enemy.size);
+        } else {
+            ctx.fillStyle = enemy.triangle.charging ? "#D0FF00" : triangleEnemyColor;
+            ctx.moveTo(enemy.x, enemy.y);
+            ctx.lineTo(enemy.x+enemy.size/2, enemy.y - enemy.size);
+            ctx.lineTo(enemy.x+enemy.size, enemy.y);
+        }
         ctx.fill();
         ctx.closePath();
     });
@@ -238,8 +278,6 @@ function update() {
     debugPoints = [];
 
     if (kills >= killsPerLevel * level) {
-        console.log(kills, killsPerLevel, level);
-        console.log(killsPerLevel * level);
         level++;
         pause();
         levelUp();
@@ -494,7 +532,7 @@ function restart() {
     lives = livesStart;
     speed = speedStart;
     spread = spreadStart;
-    enemySpeed = enemySpeedStart;
+    squareEnemySpeed = squareEnemySpeedStart;
     bulletSize = bulletSizeStart;
     bulletSpeed = bulletSpeedStart;
     bulletPierce = bulletPierceStart;
@@ -582,11 +620,25 @@ function load() {
 }
 
 function spawnEnemy() {
+    let enemyPos;
     if (Math.random() > 0.5) {
-        enemies.push({x: Math.random() * (width + enemySize) - enemySize / 2, y: Math.random() > 0.5 ? 0 - enemySize / 2 : height + enemySize / 2, size: enemySize, hp: enemyMaxHp});
+        enemyPos = {x: Math.random() * (width + squareEnemySize) - squareEnemySize / 2, y: Math.random() > 0.5 ? 0 - squareEnemySize / 2 : height + squareEnemySize / 2}
     } else {
-        enemies.push({x: Math.random() > 0.5 ? 0 - enemySize / 2 : width + enemySize / 2, y: Math.random() * (height + enemySize) - enemySize / 2, size: enemySize, hp: enemyMaxHp});
+        enemyPos = {x: Math.random() > 0.5 ? 0 - squareEnemySize / 2 : width + squareEnemySize / 2, y: Math.random() * (height + squareEnemySize) - squareEnemySize / 2};
     }
+    let enemySize;
+    let hp;
+    let enemyTriangle;
+    if (Math.random() > 0.9) {
+        enemySize = triangleEnemySize;
+        hp = 0;
+        enemyTriangle = { cd: triangleEnemyChargeCooldownMs, charging: false, canCharge: true };
+    } else {
+        enemySize = squareEnemySize;
+        hp = squareEnemyMaxHp;
+        enemyTriangle = null;
+    }
+    enemies.push( {x: enemyPos.x, y: enemyPos.y, size: enemySize, hp: hp, triangle: enemyTriangle} );
 }
 
 function updateTimer() {

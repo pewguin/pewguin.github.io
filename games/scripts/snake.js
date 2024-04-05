@@ -42,8 +42,8 @@ function update() {
         target = vectorBetweenPoints(getSnakeHead(), target);
         target = { x: target.x * speed + getSnakeHead().x, y: target.y * speed + getSnakeHead().y };
     }
-    calculateSnake();
-    drawSnake();
+    calculateJoints();
+    drawJoints();
 
     drawDebugPoints();
     debugPoints = [];
@@ -53,7 +53,7 @@ function getSnakeHead() {
     return joints[joints.length-1];
 }
 
-function drawSnake() {
+function drawJoints() {
     ctx.beginPath();
     ctx.ellipse(joints[0].x, joints[0].y, snakeWidth/2, snakeWidth/2, 0, 0, 2*Math.PI);
     ctx.fillStyle = snakeColor;
@@ -75,7 +75,7 @@ function drawSnake() {
     ctx.closePath();
 }
 
-function calculateSnake() {
+function calculateJoints() {
     joints[joints.length-1] = { x: target.x, y: target.y, l: joints[joints.length-1].l };
     for (let i = joints.length-2; i >= 0; i--) {
         let newPosVec = vectorBetweenPoints(joints[i+1], joints[i]);

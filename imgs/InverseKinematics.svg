@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="300mm"
+   height="200mm"
+   viewBox="0 0 300 200"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="InverseKinematic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.69219276"
+     inkscape:cx="371.28386"
+     inkscape:cy="275.21236"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="446"
+     inkscape:window-y="1791"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;stroke-width:0.70692"
+       id="rect1"
+       width="300"
+       height="200"
+       x="2.8421709e-14"
+       y="0"
+       ry="22.772785" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:2;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 16.487327,190.27998 36.488348,118.38442"
+       id="path7" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ffe400;stroke-width:2;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 36.488348,118.31684 86.220614,69.192719"
+       id="path8" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#47ff00;stroke-width:2;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 86.153042,69.192719 142.98027,50.00255"
+       id="path9" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#00a8ff;stroke-width:2;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 142.96947,50.02558 50.82589,11.897198"
+       id="path10" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#b300ff;stroke-width:2;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 193.77677,61.911941 237.57969,44.326585"
+       id="path11" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.78228;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 238.12016,44.298464 v 26.164095 l 6.37236,-1.707461 1.59123,5.938552 4.37874,-1.049884 -1.23556,-5.588924 5.71301,-0.56066 z"
+       id="path12"
+       sodipodi:nodetypes="cccccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:24.8337px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.548135;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       x="-5.9752464"
+       y="183.73323"
+       id="text12"
+       transform="rotate(-17.782153)"><tspan
+         sodipodi:role="line"
+         id="tspan12"
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.548135;stroke-dasharray:none;stroke-opacity:1"
+         x="-5.9752464"
+         y="183.73323">Inverse Kinematics</tspan></text>
+  </g>
+</svg>

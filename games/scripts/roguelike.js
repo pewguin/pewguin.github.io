@@ -169,7 +169,7 @@ function update() {
         player.y = height -playerSize;
     }
 
-    let shootVector = { x: keysHeld[37] ? -1 : 0 + keysHeld[39] ? 1 : 0, y: keysHeld[38] ? -1 : 0 + keysHeld[40] ? 1 : 0};
+    let shootVector = { x: keysHeld[74] ? -1 : 0 + keysHeld[76] ? 1 : 0, y: keysHeld[73] ? -1 : 0 + keysHeld[75] ? 1 : 0};
     shootVector = normalize(shootVector);
     if (magnitude(shootVector) > 0 && canFire) {
         let dir = vectorToAngle(shootVector);
@@ -566,6 +566,7 @@ function mousemove(event) {
 
 let paused = false;
 function keydown(event) {
+    console.log(event.keyCode);
     keysHeld[event.keyCode] = true;
     keysPressed.push(event.key);
     if (event.key == ' ') {

@@ -17,6 +17,7 @@ let debugPoints = [];
 //* inverse kinematics variables
 let segmentSize = 1;
 let segmentAmount = 100;
+let segmentGain = 20;
 let joints = [];
 for (let i = 0; i < segmentAmount; i++) {
     joints.push({ x: 0, y: 0, l: segmentSize });
@@ -30,6 +31,12 @@ let headSize = 5;
 let snakeColor = "#00CF00";
 let snakeHeadColor = "#FF0000";
 
+//* apple variables
+let apples = [];
+let appleSize = 20;
+let appleColor = "#FF0000";
+let appleCooldownMs = 600;
+
 function update() {
     target = mouse;
     ctx.beginPath();
@@ -37,6 +44,23 @@ function update() {
     ctx.fillStyle = getRGBAsString(backgroundColor);
     ctx.fill();
     ctx.closePath();
+
+    apples.forEach(a => {
+        if (distance(getSnakeHead(), a) < appleSize + headSize) {
+            apples.splice(apples.indexOf(a), 1);
+            let additionalSegments = [];
+            for (let i = 0; i < segmentGain; i++) {
+                additionalSegments.push({ x: 0, y: 0, l: segmentSize })
+            }
+            joints.unshift(...additionalSegments);
+        } else {
+            ctx.beginPath();
+            ctx.ellipse(a.x, a.y, appleSize, appleSize, 0, 0, 2*Math.PI);
+            ctx.fillStyle = appleColor;
+            ctx.fill();
+            ctx.closePath();
+        }
+    })
 
     if (!(distance(getSnakeHead(), target) < speed)) { 
         target = vectorBetweenPoints(getSnakeHead(), target);
@@ -231,9 +255,14 @@ function mousedown(event) {
     event.handled = true;
 }
 
+function spawnApple() {
+    apples.push({ x: Math.random() * width, y: Math.random() * height });
+}
+
 function load() {
     resize();
     mainLoop = window.setInterval(update, 17);
+    window.setInterval(spawnApple, appleCooldownMs);
 }
 
 window.addEventListener("resize", resize);

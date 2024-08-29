@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="300mm"
+   height="200mm"
+   viewBox="0 0 300 200"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="GeoRogue.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.48945419"
+     inkscape:cx="461.73882"
+     inkscape:cy="403.51069"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="446"
+     inkscape:window-y="1791"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;stroke-width:0.70692"
+       id="rect1"
+       width="300"
+       height="200"
+       x="-4.4408921e-16"
+       y="0"
+       ry="22.772785" />
+    <circle
+       style="fill:#ff1bf0;stroke:none;stroke-width:0.2;stroke-linecap:round;fill-opacity:1"
+       id="path1"
+       cx="207.03758"
+       cy="92.166862"
+       r="22.163292" />
+    <rect
+       style="fill:#d50000;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="rect2"
+       width="32.569225"
+       height="32.569229"
+       x="30.271814"
+       y="42.16431"
+       ry="0" />
+    <rect
+       style="fill:#d00000;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="rect2-6"
+       width="32.569225"
+       height="32.569229"
+       x="69.523445"
+       y="104.487"
+       ry="0" />
+    <rect
+       style="fill:#ff1b1b;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="rect2-3"
+       width="32.569225"
+       height="32.569229"
+       x="14.06961"
+       y="133.10426"
+       ry="0" />
+    <rect
+       style="fill:#760000;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="rect2-1"
+       width="32.569225"
+       height="32.569229"
+       x="126.17914"
+       y="60.922661"
+       ry="0" />
+    <rect
+       style="fill:#ff1b1b;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="rect2-8"
+       width="32.569225"
+       height="32.569229"
+       x="47.765255"
+       y="92.172653"
+       ry="0" />
+    <path
+       sodipodi:type="star"
+       style="fill:#38ff1b;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="path2"
+       inkscape:flatsided="true"
+       sodipodi:sides="3"
+       sodipodi:cx="50.272835"
+       sodipodi:cy="141.08829"
+       sodipodi:r1="19.192072"
+       sodipodi:r2="9.596036"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.52359878"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 50.272835,121.89622 16.620821,28.7881 -33.241643,0 z"
+       inkscape:transform-center-y="-2.8997508"
+       transform="rotate(-12.411302,241.65152,-670.60459)"
+       inkscape:transform-center-x="-2.0624539" />
+    <circle
+       style="fill:#0052d5;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="path3"
+       cx="10.135653"
+       cy="96.35627"
+       r="3.1082668" />
+    <circle
+       style="fill:#0052d5;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="path3-6"
+       cx="167.21228"
+       cy="98.605743"
+       r="3.1082668" />
+    <circle
+       style="fill:#0052d5;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="path3-5"
+       cx="131.77356"
+       cy="92.437149"
+       r="3.1082668" />
+    <circle
+       style="fill:#0052d5;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="path3-4"
+       cx="88.92482"
+       cy="98.588646"
+       r="3.1082668" />
+    <circle
+       style="fill:#0052d5;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:round"
+       id="path3-54"
+       cx="57.457848"
+       cy="86.172668"
+       r="3.1082668" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 222.71406,180.54975 c 1.07957,7.03052 3.44824,11.48283 5.94625,15.67647"
+       id="path4"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 234.33628,178.11719 c 1.23799,8.15843 3.19571,11.99847 5.13539,15.94676"
+       id="path5"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 245.14764,176.22521 c 1.14332,7.70114 2.73169,11.84191 4.59483,13.78448"
+       id="path6"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:38.4846px;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2.42423;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       x="92.605064"
+       y="30.116568"
+       id="text6"
+       transform="rotate(6.8643097)"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:2.42423;stroke-dasharray:none"
+         x="92.605064"
+         y="30.116568">GeoRogue</tspan></text>
+  </g>
+</svg>

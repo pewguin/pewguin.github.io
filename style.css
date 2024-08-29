@@ -1,9 +1,9 @@
 html {
-    --accent: #DB2B39;
-    --dark: #67697C;
-    --light: #F8FFE5;
-    --light-accent: #F3A712;
-    --dim-light: #F0CEA0;
+    --accent: #C33C54;
+    --dark: #2C1320;
+    --light: #F0F3F5;
+    --light-accent: #40798C;
+    --dim-light: #5F4B66;
 }
 p {
     margin: 0px;
@@ -48,11 +48,26 @@ body {
 .background {
     background-color: var(--dim-light);
 }
+.dark-background {
+    background-color: var(--dark);
+}
 .light-text {
     color: var(--light);
 }
 .top {
     background-color: var(--accent);
     height: 100px;
+    width: 100%;
+}
+.icon-container {
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.icon-container a {
+    flex: 0 0 calc(33.3333333333% - 20px);
+}
+.icon-container img {
     width: 100%;
 }

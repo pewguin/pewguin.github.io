@@ -15,10 +15,10 @@ let mouse = { x: 0, y: 0};
 let debugPoints = [];
 
 //* inverse kinematics variables
-let segmentSize = 50;
+let segmentSize = 100;
 let constraints = { max: Math.PI, min: 0};
 let joints = [{ x: 500, y: 300, l: segmentSize, c: { max: Math.PI, min: -Math.PI} }];
-let segmentAmount = 4;
+let segmentAmount = 5;
 for (let i = 0; i < segmentAmount; i++) {
     joints.push({ x: 0, y: 0, l: segmentSize, c: constraints });
 }
@@ -107,11 +107,11 @@ function calculateJoints() {
                 relAngle = Math.PI*2 + relAngle;
             }
 
-            let constrainedPos = checkConstraints(joints[i].c, relAngle, prevSegmentAngle, joints[i]);
+            // let constrainedPos = checkConstraints(joints[i].c, relAngle, prevSegmentAngle, joints[i]);
             
-            if (constrainedPos) {
-                newPos = constrainedPos;
-            }
+            // if (constrainedPos) {
+            //     newPos = constrainedPos;
+            // }
             
             joints[i+1].x = newPos.x;
             joints[i+1].y = newPos.y;

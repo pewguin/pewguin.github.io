@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="300mm"
+   height="200mm"
+   viewBox="0 0 300 200"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="SnakeyThing.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.97890839"
+     inkscape:cx="503.6222"
+     inkscape:cy="378.48281"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="446"
+     inkscape:window-y="1791"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2" />
+  <defs
+     id="defs1">
+    <rect
+       x="707.93141"
+       y="300.33454"
+       width="31.667928"
+       height="36.775658"
+       id="rect14" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;stroke-width:0.70692"
+       id="rect1"
+       width="300"
+       height="200"
+       x="0"
+       y="0"
+       ry="22.772785" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#04ff34;stroke-width:3;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 225.14662,38.920904 C 84.598911,39.731757 73.787547,61.35448 53.786529,96.761691 33.785508,132.16891 94.329139,164.60299 124.33067,142.4397 154.3322,120.27641 119.46556,75.94982 82.436638,110.2759 c -37.028916,34.32607 -28.650109,69.463 5.405681,74.86868 34.055791,5.40568 113.789591,5.40568 146.764241,-33.7855"
+       id="path13" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2">
+    <circle
+       style="fill:#ff1212;fill-opacity:1;stroke:none;stroke-width:0.513208;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       id="path12-1"
+       cx="229.54431"
+       cy="39.92123"
+       r="9.1896582" />
+    <text
+       xml:space="preserve"
+       style="font-size:28.2818px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       x="110.75309"
+       y="75.12529"
+       id="text13"
+       transform="rotate(6.6260619)"><tspan
+         id="tspan13"
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
+         x="110.75309"
+         y="75.12529"
+         sodipodi:role="line">Snakey Thing</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text14"
+       style="fill:#ffffff;stroke-width:0;stroke:#ffffff;stroke-linecap:round;fill-opacity:1;stroke-opacity:1;stroke-dasharray:none;white-space:pre;shape-inside:url(#rect14)" />
+  </g>
+</svg>

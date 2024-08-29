@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="300mm"
+   height="200mm"
+   viewBox="0 0 300 200"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="BouncyBreakout.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.69219276"
+     inkscape:cx="314.94117"
+     inkscape:cy="359.00404"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="446"
+     inkscape:window-y="1791"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;stroke-width:0.70692"
+       id="rect1"
+       width="300"
+       height="200"
+       x="0"
+       y="0"
+       ry="22.772785" />
+    <rect
+       style="fill:#efea0a;fill-opacity:1;stroke-width:0.370922"
+       id="rect2"
+       width="121.78882"
+       height="51.498901"
+       x="-1.1242158"
+       y="52.437035"
+       ry="4.581193"
+       transform="rotate(-12.125598)" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.265;stroke-dasharray:none;stroke-opacity:1"
+       d="m 28.8858,56.069561 -13.024558,-24.511845 24.646719,12.84956 -5.143595,3.556034 6.324061,6.564028 -3.113752,2.763415 -6.185306,-6.024377 z"
+       id="path7"
+       sodipodi:nodetypes="cccccccc" />
+    <circle
+       style="fill:#fd00e2;fill-opacity:1;stroke:#000000;stroke-width:0.185491;stroke-dasharray:none;stroke-opacity:1"
+       id="path8"
+       r="16.932508"
+       cy="136.35831"
+       cx="188.52312" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       d="m 117.033,161.35958 -27.298693,21.08216 8.10852,7.02738 z"
+       id="path9"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       d="m 167.30583,100.0051 18.37932,-20.001018 5.94625,9.730224 z"
+       id="path10" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       d="m 136.4653,115.9649 3.86817,26.48947 17.76119,7.74825 z"
+       id="path11" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       d="m 169.89927,157.92709 15.8136,24.82775 8.7611,-9.35239 -23.48176,-23.0126 z"
+       id="path12" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       d="m 134.60146,149.46708 -8.10852,19.73074 16.21704,1.62171 1.08114,-18.91989 -6.75711,2.70284 z"
+       id="path13" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       d="m 205.68617,94.869703 -11.62222,11.351937 10.81137,7.02739 8.3788,-4.86512 -7.02738,-6.21653 z"
+       id="path14"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       d="m 106.7622,123.24953 -21.352438,25.13642 12.703352,-1.89199 z"
+       id="path15" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       d="m 174.06293,57.029935 -4.32454,15.946764 8.3788,-7.297672 z"
+       id="path16" />
+    <path
+       style="fill:#ef0a0a;fill-opacity:1;stroke:#000000;stroke-width:0.174975;stroke-dasharray:none;stroke-opacity:1"
+       d="m 141.39463,97.265203 15.56785,-0.20304 12.04341,18.574807"
+       id="path17" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2.965;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 210.01071,128.79035 c 27.64767,31.6814 47.96062,19.7149 52.59906,13.64538"
+       id="path19"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2.965;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 207.97397,141.61527 c 19.56056,30.15583 53.649,18.54349 63.42402,11.51025"
+       id="path20"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2.965;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 204.87532,153.79163 c 20.53467,23.78925 43.04234,20.64579 55.40824,16.21704"
+       id="path21"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:24.4768px;fill:#fff5f5;fill-opacity:1;stroke:#ffffff;stroke-width:1.54184;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       x="194.34738"
+       y="7.1368227"
+       id="text21"
+       transform="matrix(0.7207175,0.15694835,-0.28847274,1.3246864,0,0)"><tspan
+         id="tspan21"
+         style="stroke-width:1.54184;stroke-dasharray:none;fill:#fff5f5;fill-opacity:1"
+         x="194.34738"
+         y="7.1368227"
+         sodipodi:role="line">Bouncy Breakout!</tspan></text>
+  </g>
+</svg>
